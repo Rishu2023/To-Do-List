@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <style>
+        /* This is the styling for the entire page */
+        body {
+            background-color: #FFD21F;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+        }
+
+        /* Styles for the main container of the code */
+        .Container {
+            max-width: 800px;
+            margin: 70px auto;
+            background-color: #FFD21F;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgb(1, 1, 1);
+            padding: 20px;
+        }
+
+        /* Styles for the heading */
+        .Heading {
+            font-size: 40px;
+            color: #333;
+        }
+
+        /* Styles the input box */
+        .InputField {
+            width: 81%;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 100px;
+            font-size: 20px;
+            outline: 2px black solid;
+        }
+
+        /* Styles added to the "Add" button */
+        .Button {
+            padding: 10px 20px;
+            background-color: #0077df;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 16px;
+        }
+        /* The colors of the buttons change to Dark Blue  */
+        .Button:hover {
+            background-color: #004E92;
+        }
+
+        /* Styles the task list  */
+        .TaskList {
+            list-style: none;
+            padding: 0;
+        }
+
+        /* The Styling and Layout for each Task */
+        .TaskItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* Styling for completed tasks */
+        .CompletedTask {
+            text-decoration: line-through;
+            color: #aaa;
+        }
+
+        /* Styling for the clear button */
+        .ClearButton {
+            background-color: #d32535;
+            color: white;
+            border: 1px solid;
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .ClearButton:hover {
+            background-color: #004E92;
+        }
+    </style>
+</head>
+<body>
+    <div class="Container">
+        <h1 class="Heading">Simple To-Do List</h1>
+        
+        <!-- This is the input field for adding new tasks -->
+        <input type="text" class="InputField" id="new-task" placeholder="Add a new task...">
+        
+        <!-- This is the Button for adding new tasks -->
+        <button class="Button" id="add-task">Add</button>
+        
+        <!-- Lists the tasks on the list -->
+        <ul class="TaskList" id="task-list"></ul>
+        
+        <!-- Button to clear completed tasks -->
+        <button class="ClearButton" id="clear-completed">Clear Completed</button>
+    </div>
+    
+    <!-- Makes it functional by adding the Javascript code-->
+    <script>
+        // Get references to HTML elements
+        const taskInput = document.getElementById('new-task');
+        const addTaskButton = document.getElementById('add-task');
+        const taskList = document.getElementById('task-list');
+        const clearButton = document.getElementById('clear-completed');
+
+        // Adds a task when the "Add" button is clicked
+        addTaskButton.addEventListener('click', () => {
+            const taskText = taskInput.value.trim();
+            if (taskText !== '') {
+                // Creates a new task to the to-do list 
+                const taskItem = document.createElement('li');
+                taskItem.innerHTML = `
+                    <input type="checkbox">
+                    <span>${taskText}</span>
+                    <button class="Button">Complete</button>
+                    <button class="Button">Delete</button>
+                `;
+                taskList.appendChild(taskItem);
+                taskInput.value = '';
+
+                // Provides functionality to help either complete any tasks or delete any tasks 
+                const completeButton = taskItem.querySelectorAll('button')[0];
+                const deleteButton = taskItem.querySelectorAll('button')[1];
+
+                completeButton.addEventListener('click', () => {
+                    taskItem.classList.toggle('CompletedTask');
+                });
+
+                deleteButton.addEventListener('click', () => {
+                    taskList.removeChild(taskItem);
+                });
+            }
+        });
+
+        // Whenever the Enter key is pressed, it adds a task 
+        taskInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                addTaskButton.click();
+            }
+        });
+
+        // Clears any completed tasks
+        clearButton.addEventListener('click', () => {
+            const completedTasks = taskList.querySelectorAll('.CompletedTask');
+            if (completedTasks.length > 0) {
+              // Confirms to the user if there the tasks listed want to be completed
+                const confirmClear = confirm("Are you sure about that?");
+                if (confirmClear) {
+                    completedTasks.forEach((taskItem) => {
+                        taskList.removeChild(taskItem);
+                    });
+                }
+        // Alerts the user that there are no completed tasks
+            } else {
+                alert("NO COMPLETED TASKS TO CLEAR!");
+            }
+        });
+    </script>
+</body>
+</html>
